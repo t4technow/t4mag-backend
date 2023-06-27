@@ -51,9 +51,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -163,12 +163,18 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
-
+'''
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5473",
     "http://127.0.0.1:5473",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+]
+'''
+
+CORS_ALLOWED_ORIGINS = [
+    "http://api.t4technow.com",
+    "http://3.110.193.98",
 ]
 
 SITE_DOMAIN = '127.0.0.1:5555'
