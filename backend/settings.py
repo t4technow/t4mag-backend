@@ -173,8 +173,8 @@ CORS_ALLOWED_ORIGINS = [
 '''
 
 CORS_ALLOWED_ORIGINS = [
-    "http://api.t4technow.com",
+    "http://t4technow.com",
     "http://3.110.193.98",
 ]
 
-SITE_DOMAIN = '127.0.0.1:5555'
+SITE_DOMAIN = 'api.t4technow.com'
