@@ -146,7 +146,13 @@ class Post(models.Model):
         original_image.convert('RGB')  # Convert the image to RGB format
         directory = str(settings.MEDIA_ROOT) + '/post/'
         os.makedirs(os.path.join(directory, 'featured'), exist_ok=True)
-        original_image.save(self.featured_image.path.replace('original/', 'featured/').replace('.jpg', '.webp'), format='webp')
+
+        # Extract the file extension dynamically
+        file_extension = os.path.splitext(self.featured_image.path)[1]
+        # Replace the file extension with '.webp' for the new image path
+        new_image_path = self.featured_image.path.replace('original/', 'featured/').replace(file_extension, '.webp')
+
+        original_image.save(new_image_path, format='webp')
   
   @property
   def thumbnail_sm_url(self):
@@ -174,7 +180,7 @@ class Post(models.Model):
       image_url = image_url.replace(media_root, media_url)
 
       domain = settings.SITE_DOMAIN
-      image_url = f"http://{domain}{image_url}"
+      image_url = f"https://{domain}{image_url}"
 
       return image_url
 
