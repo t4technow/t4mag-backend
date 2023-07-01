@@ -173,8 +173,8 @@ CORS_ALLOWED_ORIGINS = [
 '''
 
 CORS_ALLOWED_ORIGINS = [
-    "http://t4technow.com",
-    "http://www.t4technow.com",
+    "https://t4technow.com",
+    "https://www.t4technow.com",
     "http://localhost:3000",
     "http://3.110.193.98",
 ]
