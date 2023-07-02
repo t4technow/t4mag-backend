@@ -3,21 +3,6 @@ from blog.models import Category, Post, Tag
 from users.models import User
 from analytics.models import PostVisit, Visitor
 
-class CategorySerializer(serializers.ModelSerializer):
-  post_count = serializers.SerializerMethodField()
-  
-  def get_post_count(self, obj):
-    return obj.post_category.filter(status='published').count()
-  class Meta:
-    model = Category
-    fields = '__all__'
-
-class TagSerializer(serializers.ModelSerializer):
-  
-  class Meta:
-    model = Tag
-    fields = '__all__'
-
 class UserFollowingSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -28,7 +13,64 @@ class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
     fields = ('username', 'email', 'first_name', 'last_name', 'is_superuser', 'is_author', 'bio', 'profile_pic', 'following_authors')
+
+class UserSerializerUtil(serializers.ModelSerializer):
+  class Meta:
+    model = User
+    fields = ('username', 'first_name', 'last_name', 'profile_pic')
+
+class CategorySerializerUtil(serializers.ModelSerializer):
+  
+  class Meta:
+    model = Category
+    fields = ('title', 'slug')
+
+class PostSerializerUtil(serializers.ModelSerializer):
+  category = CategorySerializerUtil(many=False)
+  author = UserSerializerUtil(read_only=True)
+
+  class Meta:
+    model = Post
+    fields = ('id', 'title', 'slug', 'excerpt', 'author', 'category', 'created_at', 'thumbnail_sm_url', 'thumbnail_url', 'views')
     
+
+class CategorySerializer(serializers.ModelSerializer):
+  post_count = serializers.SerializerMethodField()
+  
+  def get_post_count(self, obj):
+    return obj.post_category.filter(status='published').count()
+  class Meta:
+    model = Category
+    fields = '__all__'
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    posts = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    def get_posts(self, category):
+        posts = category.post_category.filter(status='published')
+        return PostSerializerUtil(posts, many=True).data
+        
+class TagSerializer(serializers.ModelSerializer):
+  
+  class Meta:
+    model = Tag
+    fields = '__all__'
+
+class TagDetailSerializer(serializers.ModelSerializer):
+    posts = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+    def get_posts(self, tag):
+        posts = tag.post_tags.filter(status='published')
+        return PostSerializerUtil(posts, many=True).data
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -46,8 +88,7 @@ class AllPostSerializer(serializers.ModelSerializer):
   class Meta:
     model = Post
     fields = ('id', 'title', 'slug', 'excerpt', 'author', 'category', 'created_at', 'thumbnail_sm_url', 'thumbnail_url', 'views', 'status')
-    
-    
+
 class PostDetailSerializer(serializers.ModelSerializer):
   author = UserSerializer()
   category = CategorySerializer(many = False)
@@ -78,7 +119,8 @@ class PostVisitSerializer(serializers.ModelSerializer):
   
   def get_total_views(self, obj):
     return obj.post.views
-    
+  
+
 class VisitorSerializer(serializers.ModelSerializer):
   class Meta:
     model = Visitor

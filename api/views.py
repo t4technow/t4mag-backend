@@ -2,7 +2,7 @@ from rest_framework import generics
 from blog.models import Post, Category
 from users.models import User
 from analytics.models import PostVisit, Visitor
-from .serializers import AllPostSerializer, PostSerializer, PostDetailSerializer, CategorySerializer, UserSerializer, PostVisitSerializer, VisitorSerializer
+from .serializers import *
 
 class PostList(generics.ListAPIView):
   queryset = Post.postobjects.all()
@@ -29,6 +29,21 @@ class CategoryList(generics.ListAPIView):
   queryset = Category.objects.all()
   lookup_field = 'slug'
   serializer_class = CategorySerializer
+  
+class CategoryDetails(generics.RetrieveUpdateAPIView):
+  queryset = Category.objects.all()
+  lookup_field = 'slug'
+  serializer_class = CategoryDetailSerializer
+  
+class TagList(generics.ListAPIView):
+  queryset = Tag.objects.all()
+  lookup_field = 'slug'
+  serializer_class = TagSerializer
+  
+class TagDetails(generics.RetrieveUpdateAPIView):
+  queryset = Tag.objects.all()
+  lookup_field = 'slug'
+  serializer_class = TagDetailSerializer
   
 class UsersList(generics.ListAPIView):
   queryset = User.objects.all()
