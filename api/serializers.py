@@ -54,7 +54,20 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     def get_posts(self, category):
         posts = category.post_category.filter(status='published')
         return PostSerializerUtil(posts, many=True).data
-        
+      
+class CategoryLatestPostSerializer(serializers.ModelSerializer):
+  latest_post = serializers.SerializerMethodField()
+
+  class Meta:
+    model = Category
+    fields = '__all__'
+
+  def get_latest_post(self, obj):
+    post = obj.post_category.filter(status='published').order_by('-created_at').first()
+    if post:
+        return PostSerializerUtil(post, many=False).data
+    return None
+
 class TagSerializer(serializers.ModelSerializer):
   
   class Meta:

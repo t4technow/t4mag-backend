@@ -51,10 +51,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -180,3 +179,5 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 SITE_DOMAIN = 'api.t4technow.com'
+
+CSRF_TRUSTED_ORIGINS = ['https://www.t4technow.com', 'http://localhost:3000']
